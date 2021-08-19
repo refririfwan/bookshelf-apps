@@ -1,5 +1,6 @@
 const UNCOMPLETED_LIST_BOOK_ID = "incompleteBookshelfList";
 const COMPLETED_LIST_BOOK_ID = "completeBookshelfList";
+const BOOK_ITEMID = "bookId";
 
 function makeBook(title, author, year, isComplete) {
   const bookTitle = document.createElement("h3");
@@ -72,11 +73,23 @@ function addBook() {
   if (checkIsComplete.checked == true) {
     isComplete = true;
     const book = makeBook(title, author, year, isComplete);
+
+    const bookObject = composeBookObject(title, author, year, isComplete);
+    book[BOOK_ITEMID] = bookObject.id;
+    books.push(bookObject);
+
     completedBookList.append(book);
+    updateDataToStorage();
   } else {
     isComplete = false;
     const book = makeBook(title, author, year, isComplete);
+
+    const bookObject = composeBookObject(title, author, year, isComplete);
+    book[BOOK_ITEMID] = bookObject.id;
+    books.push(bookObject);
+
     uncompletedBookList.append(book);
+    updateDataToStorage();
   }
 }
 
@@ -87,8 +100,15 @@ function addBookToCompleted(bookElement) {
   const bookYear = bookElement.querySelector(".book_item > .year").innerText;
 
   const newBook = makeBook(bookTitle, bookAuthor, bookYear, true);
+
+  const book = findBook(bookElement[BOOK_ITEMID]);
+  book.isComplete = true;
+  newBook[BOOK_ITEMID] = book.id;
+
   listCompleted.append(newBook);
   bookElement.remove();
+
+  updateDataToStorage();
 }
 
 function addBookToUncompleted(bookElement) {
@@ -98,10 +118,21 @@ function addBookToUncompleted(bookElement) {
   const bookYear = bookElement.querySelector(".book_item > .year").innerText;
 
   const newBook = makeBook(bookTitle, bookAuthor, bookYear, false);
+
+  const book = findBook(bookElement[BOOK_ITEMID]);
+  book.isComplete = false;
+  newBook[BOOK_ITEMID] = book.id;
+
   listUncompleted.append(newBook);
   bookElement.remove();
+
+  updateDataToStorage();
 }
 
 function removeBook(bookElement) {
+  const bookPosition = findBookIndex(bookElement[BOOK_ITEMID]);
+  books.splice(bookPosition, 1);
+
   bookElement.remove();
+  updateDataToStorage();
 }
