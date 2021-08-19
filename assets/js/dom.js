@@ -2,14 +2,15 @@ const UNCOMPLETED_LIST_BOOK_ID = "incompleteBookshelfList";
 const COMPLETED_LIST_BOOK_ID = "completeBookshelfList";
 
 function makeBook(title, author, year, isComplete) {
-  const textTitle = document.createElement("h3");
-  textTitle.innerText = title;
+  const bookTitle = document.createElement("h3");
+  bookTitle.innerText = title;
 
-  const textAuthor = document.createElement("p");
-  textAuthor.innerText = "Penulis : " + author;
+  const bookAuthor = document.createElement("p");
+  bookAuthor.innerText = author;
 
-  const textYear = document.createElement("p");
-  textYear.innerText = "Tahun : " + year;
+  const bookYear = document.createElement("p");
+  bookYear.classList.add("year");
+  bookYear.innerText = year;
 
   const action = document.createElement("div");
   action.classList.add("action");
@@ -24,26 +25,26 @@ function makeBook(title, author, year, isComplete) {
 
   const article = document.createElement("article");
   article.classList.add("book_item");
-  article.append(textTitle, textAuthor, textYear, action);
+  article.append(bookTitle, bookAuthor, bookYear, action);
 
   return article;
 }
 
 function completeButton() {
   return createButton("green", "Selesai dibaca", function (event) {
-
+    addBookToCompleted(event.target.parentElement.parentElement);
   });
 }
 
 function uncompleteButton() {
   return createButton("green", "Belum selesai dibaca", function (event) {
-
+    addBookToUncompleted(event.target.parentElement.parentElement);
   });
 }
 
 function trashButton() {
   return createButton("red", "Hapus buku", function (event) {
-
+    removeBook(event.target.parentElement.parentElement);
   });
 }
 
@@ -62,23 +63,45 @@ function addBook() {
   const completedBookList = document.getElementById(COMPLETED_LIST_BOOK_ID);
 
   const title = document.getElementById("inputBookTitle").value;
-  const author = document.getElementById("inputBookAuthor").value;
-  const year = document.getElementById("inputBookYear").value;
+  const author = "Penulis : " + document.getElementById("inputBookAuthor").value;
+  const year = "Tahun : " + document.getElementById("inputBookYear").value;
   const checkIsComplete = document.getElementById("inputBookIsComplete");
 
   let isComplete = false;
 
   if (checkIsComplete.checked == true) {
     isComplete = true;
-    for (let i = 0; i < 10; i++) {
-      const book = makeBook(title, author, year, isComplete);
-      completedBookList.append(book);
-    }
+    const book = makeBook(title, author, year, isComplete);
+    completedBookList.append(book);
   } else {
     isComplete = false;
-    for (let i = 0; i < 10; i++) {
-      const book = makeBook(title, author, year, isComplete);
-      uncompletedBookList.append(book);
-    }
+    const book = makeBook(title, author, year, isComplete);
+    uncompletedBookList.append(book);
   }
+}
+
+function addBookToCompleted(bookElement) {
+  const listCompleted = document.getElementById(COMPLETED_LIST_BOOK_ID);
+  const bookTitle = bookElement.querySelector(".book_item > h3").innerText;
+  const bookAuthor = bookElement.querySelector(".book_item > p").innerText;
+  const bookYear = bookElement.querySelector(".book_item > .year").innerText;
+
+  const newBook = makeBook(bookTitle, bookAuthor, bookYear, true);
+  listCompleted.append(newBook);
+  bookElement.remove();
+}
+
+function addBookToUncompleted(bookElement) {
+  const listUncompleted = document.getElementById(UNCOMPLETED_LIST_BOOK_ID);
+  const bookTitle = bookElement.querySelector(".book_item > h3").innerText;
+  const bookAuthor = bookElement.querySelector(".book_item > p").innerText;
+  const bookYear = bookElement.querySelector(".book_item > .year").innerText;
+
+  const newBook = makeBook(bookTitle, bookAuthor, bookYear, false);
+  listUncompleted.append(newBook);
+  bookElement.remove();
+}
+
+function removeBook(bookElement) {
+  bookElement.remove();
 }
