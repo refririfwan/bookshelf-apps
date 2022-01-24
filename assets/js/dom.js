@@ -145,7 +145,7 @@ function refreshDataFromBooks() {
     const newBook = makeBook(book.title, book.author, book.year, book.isComplete);
     newBook[BOOK_ITEMID] = book.id;
 
-    if (todo.isComplete) {
+    if (book.isComplete) {
       listCompleted.append(newBook);
     } else {
       listUncompleted.append(newBook);
