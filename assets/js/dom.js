@@ -137,7 +137,7 @@ function removeBook(bookElement) {
   updateDataToStorage();
 }
 
-function refrehsDataFromBooks() {
+function refreshDataFromBooks() {
   const listUncompleted = document.getElementById(UNCOMPLETED_LIST_BOOK_ID);
   const listCompleted = document.getElementById(COMPLETED_LIST_BOOK_ID);
 
