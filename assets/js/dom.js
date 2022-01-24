@@ -136,3 +136,19 @@ function removeBook(bookElement) {
   bookElement.remove();
   updateDataToStorage();
 }
+
+function refrehsDataFromBooks() {
+  const listUncompleted = document.getElementById(UNCOMPLETED_LIST_BOOK_ID);
+  const listCompleted = document.getElementById(COMPLETED_LIST_BOOK_ID);
+
+  for (book of books) {
+    const newBook = makeBook(book.title, book.author, book.year, book.isComplete);
+    newBook[BOOK_ITEMID] = book.id;
+
+    if (todo.isComplete) {
+      listCompleted.append(newBook);
+    } else {
+      listUncompleted.append(newBook);
+    }
+  }
+}
